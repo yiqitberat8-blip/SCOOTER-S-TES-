@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Sepetim</title>
+<link rel="stylesheet" href="sepet.css">
+<script defer src="script.js"></script>
+</head>
+<body>
+
+<div class="cart-wrapper">
+
+    <h1 class="cart-title">Sepetim</h1>
+
+    <div class="cart-layout">
+
+        <!-- SOL TARAF ÜRÜNLER -->
+        <div id="cart-items" class="cart-products">
+            <!-- JS burayı dolduruyor -->
+        </div>
+
+        <!-- SAĞ TARAF ÖZET -->
+        <div class="cart-summary">
+
+            <h2>Sipariş Özeti</h2>
+
+            <div class="summary-row">
+                <span>Toplam</span>
+                <strong id="total-price">0₺</strong>
+            </div>
+
+           <a href="odeme.html">
+    <button class="checkout-btn">
+        Güvenli Ödeme Yap
+    </button>
+</a>
+
+            <button class="clear-cart-btn" onclick="clearCart()">
+                🗑 Tüm Sepeti Sil
+            </button>
+
+            <button class="home-btn" onclick="window.location.href='ticaret.html'">
+                ← Ana Sayfaya Dön
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

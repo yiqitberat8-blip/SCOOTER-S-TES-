@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>E-Fatura</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: Arial, sans-serif; background: #eef1f5; padding: 40px; }
+
+.fatura { position: relative; background: white; padding: 50px; max-width: 900px; margin: auto; border-radius: 12px; box-shadow: 0 12px 30px rgba(0,0,0,0.2); overflow-x: auto; }
+.fatura::after { content: "ÖRNEKTİR"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 100px; color: rgba(0,0,0,0.05); pointer-events: none; z-index: 0; }
+h1 { text-align: center; font-size: 32px; margin-bottom: 20px; }
+.fatura-header { display: flex; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; }
+.fatura-header .sirket, .fatura-header .musteri { width: 48%; }
+p { margin: 6px 0; }
+.bold { font-weight: 700; }
+hr { border: none; border-top: 2px solid #eee; margin: 20px 0; }
+
+.fatura-info { display: flex; justify-content: space-between; flex-wrap: wrap; margin-bottom: 20px; }
+.fatura-info div { width: 48%; }
+.fatura-info p { margin: 4px 0; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
+th, td { border: 1px solid #ddd; padding: 12px; text-align: center; word-wrap: break-word; }
+th { background-color: #4CAF50; color: white; font-weight: 700; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1); }
+tbody tr:nth-child(even) { background-color: #f9f9f9; }
+tbody tr:nth-child(odd) { background-color: #ffffff; }
+
+.total { text-align: right; font-weight: 700; font-size: 18px; margin-top: 10px; padding: 10px; background-color: #f1f8e9; border-radius: 6px; }
+
+button { padding: 12px 28px; font-size: 16px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+button:hover { background: #45a049; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.25); }
+#printBtn, #pdfBtn { display: block; margin: 20px auto 0; }
+#homeBtn { position: fixed; right: 20px; bottom: 20px; z-index: 999; }
+
+@media print {
+  body * { visibility: hidden; }
+  .fatura, .fatura * { visibility: visible; }
+  .fatura { position: absolute; top: 0; left: 0; width: 100%; box-shadow: none; }
+  button { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="fatura" id="faturaContent">
+  <h1>E-FATURA</h1>
+
+  <div class="fatura-header">
+    <div class="sirket">
+      <p class="bold" style="font-size:26px;">Scooter Mağazası</p>
+      <p>Adres: Örnek Mah. 123. Sok. No:45, Ümraniye, İstanbul</p>
+      <p>Telefon: 0(212) 123 45 67</p>
+      <p>Email: info@scooterbagzasi.com</p>
+      <p>Şirket Sahibi: Berat Yiğit Ünür</p>
+    </div>
+    <div class="musteri">
+      <p class="bold">Müşteri Bilgileri</p>
+      <p>Ad Soyad: <span id="musteriAd"></span></p>
+      <p>Adres: <span id="musteriAdres"></span></p>
+      <p>Şehir / İlçe: <span id="musteriSehir"></span></p>
+      <p>Posta Kodu: <span id="musteriPostal"></span></p>
+    </div>
+  </div>
+
+  <div class="fatura-info">
+    <div>
+      <p class="bold">Fatura No: <span id="faturaNo"></span></p>
+      <p class="bold">Tarih: <span id="faturaTarih"></span></p>
+    </div>
+    <div>
+      <p class="bold">Ödeme Tipi: <span id="odemeTipi"></span></p>
+    </div>
+  </div>
+
+  <hr>
+
+  <table id="urunTablosu">
+    <thead>
+      <tr>
+        <th>Ürün</th>
+        <th>Miktar</th>
+        <th>Birim Fiyat (₺)</th>
+        <th>Ara Toplam (₺)</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <p class="total">Toplam Tutar: ₺<span id="toplamTutar">0</span></p>
+
+  <p class="bold">Not: Bu fatura elektronik ortamda düzenlenmiştir.</p>
+
+  <button id="printBtn" onclick="window.print()">Yazdır</button>
+  <button id="pdfBtn">PDF Olarak İndir</button>
+</div>
+
+<button id="homeBtn" onclick="resetAndGoHome()">Anasayfaya Dön</button>
+
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+  // Müşteri verisi
+  const customerData = JSON.parse(localStorage.getItem("customerData") || "{}");
+  document.getElementById("musteriAd").textContent = customerData.name ?? "Müşteri";
+  document.getElementById("musteriAdres").textContent = customerData.address ?? "Adres girilmedi";
+  document.getElementById("musteriSehir").textContent = (customerData.city && customerData.district) ? `${customerData.city} / ${customerData.district}` : "Şehir / İlçe girilmedi";
+  document.getElementById("musteriPostal").textContent = customerData.postal ?? "Posta kodu girilmedi";
+
+  // Fatura No ve Tarih
+  const faturaNo = Math.floor(Math.random()*900000 + 100000);
+  document.getElementById("faturaNo").textContent = faturaNo;
+  document.getElementById("faturaTarih").textContent = new Date().toLocaleDateString('tr-TR');
+
+  document.getElementById("odemeTipi").textContent = "Kredi Kartı";
+
+  // Ürün verisi
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]"); 
+  const tbody = document.querySelector("#urunTablosu tbody");
+  let toplam = 0;
+
+  if(cart.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4">Sepet boş</td></tr>`;
+  } else {
+    cart.forEach(item => {
+      const araToplam = item.quantity * item.price;
+      toplam += araToplam;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${item.name}</td><td>${item.quantity}</td><td>${item.price.toFixed(2)}</td><td>${araToplam.toFixed(2)}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+  document.getElementById("toplamTutar").textContent = toplam.toFixed(2);
+
+  // PDF butonu
+  document.getElementById("pdfBtn").addEventListener("click", async () => {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p','pt','a4');
+    const fatura = document.getElementById("faturaContent");
+
+    const canvas = await html2canvas(fatura, { scale: 2 });
+    const imgData = canvas.toDataURL('image/png');
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    doc.save(`Fatura_${faturaNo}.pdf`);
+  });
+
+  function resetAndGoHome() {
+    ['customerData','cart'].forEach(k => localStorage.removeItem(k));
+    location.href = 'ticaret.html';
+  }
+
+  window.addEventListener('load', () => { localStorage.removeItem('cart'); });
+</script>
+</body>
+</html>

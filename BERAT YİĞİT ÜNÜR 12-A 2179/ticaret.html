@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Scooter Mağazası</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>SCOOTER MAĞAZASI</h1>
+
+    <a href="sepet.html" style="position:relative; text-decoration:none;">
+        <button class="cart-btn">
+            🛒 Sepet
+            <span id="cart-count" 
+                  style="background:red;color:white;border-radius:50%;padding:4px 8px;font-size:12px;position:absolute;top:-8px;right:-8px;">
+                0
+            </span>
+        </button>
+    </a>
+</header>
+
+<div class="container">
+
+<!-- 1 -->
+<div class="card">
+    <img src="1-700x933 (1).webp">
+    <h3>X1 PROM</h3>
+    <p>10000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('X1 PROM',10000,'1-700x933 (1).webp')">Sepete Ekle</button>
+        <a href="bır.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 2 -->
+<div class="card">
+    <img src="1-700x933 (2).webp">
+    <h3>HOVE MAX 2</h3>
+    <p>12000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('HOVE MAX 2',12000,'1-700x933 (2).webp')">Sepete Ekle</button>
+        <a href="iki.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 3 -->
+<div class="card">
+    <img src="1-700x933 (3).webp">
+    <h3>ZT MAX</h3>
+    <p>9000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('ZT MAX',9000,'1-700x933 (3).webp')">Sepete Ekle</button>
+        <a href="uç.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 4 -->
+<div class="card">
+    <img src="1-700x933 (4).webp">
+    <h3>BLUBER S</h3>
+    <p>15000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('BLUBER S',15000,'1-700x933 (4).webp')">Sepete Ekle</button>
+        <a href="dort.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 5 -->
+<div class="card">
+    <img src="1-700x933.webp">
+    <h3>ZEON </h3>
+    <p>11000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('ZEON',11000,'1-700x933.webp')">Sepete Ekle</button>
+        <a href="bes.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 6 -->
+<div class="card">
+    <img src="gokaratpro1-700x933.webp">
+    <h3>GO KART</h3>
+    <p>13000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('GO KART',13000,'gokaratpro1-700x933.webp')">Sepete Ekle</button>
+        <a href="altı.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 7 -->
+<div class="card">
+    <img src="segway-ninebot-f2-pro-1-700x933.webp">
+    <h3>SEGWAY F2</h3>
+    <p>8000₺</p>
+    <div class="SEGWAY F2">
+        <button onclick="addToCart('Scooter 7',8000,'segway-ninebot-f2-pro-1-700x933.webp')">Sepete Ekle</button>
+        <a href="yedi.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 8 -->
+<div class="card">
+    <img src="vsett-11-super-72-001-700x933.webp">
+    <h3>VSETT 11</h3>
+    <p>14000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('VSETT11',14000,'vsett-11-super-72-001-700x933.webp')">Sepete Ekle</button>
+        <a href="sekiz.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 9 -->
+<div class="card">
+    <img src="vsett11plusgrri1-700x933 (1).webp">
+    <h3>VSETT 11PLUS</h3>
+    <p>9500₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('VSETT 11 PLUS',9500,'vsett11plusgrri1-700x933 (1).webp')">Sepete Ekle</button>
+        <a href="dokuz.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 10 -->
+<div class="card">
+    <img src="vsettyeni8-2-700x933.webp">
+    <h3>VSETT 8</h3>
+    <p>16000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('VSETT 8',16000,'vsettyeni8-2-700x933.webp')">Sepete Ekle</button>
+        <a href="on.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+<!-- 11 -->
+<div class="card">
+    <img src="vsettyeni9son1-700x933.webp">
+    <h3>VSETT 9</h3>
+    <p>10500₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('VSETT9',10500,'vsettyeni9son1-700x933.webp')">Sepete Ekle</button>
+        <a href="onbir.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+ 
+<!-- 12 -->
+<div class="card">
+    <img src="vsettyeni10-2-700x933.webp">
+    <h3>VSETT 11</h3>
+    <p>17000₺</p>
+    <div class="buttons">
+        <button onclick="addToCart('VSETT11',17000,'vsettyeni10-2-700x933.webp')">Sepete Ekle</button>
+        <a href="oniki.html"><button class="info-btn">Ürün Hakkında</button></a>
+    </div>
+</div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
